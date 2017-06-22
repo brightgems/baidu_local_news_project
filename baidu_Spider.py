@@ -359,7 +359,7 @@ def get_all_province_news_content(datetime_string, hourBasePath = './news_hour_x
 
             city_oneday_saveBasePath = '%s/%s/%s/%s.xml'%(saveBasePath, province, city, datetime_string)
             #print city_oneday_basePath.decode('gbk').encode('utf-8')
-            print city_oneday_saveBasePath.decode(encoding).encode('utf-8')
+            print city_oneday_saveBasePath
             if not os.path.exists( '%s/%s/%s'%(saveBasePath, province, city)):
                 os.makedirs('%s/%s/%s'%(saveBasePath, province, city))
             print len(news_fliter_dict)
@@ -368,7 +368,7 @@ def get_all_province_news_content(datetime_string, hourBasePath = './news_hour_x
 
 if __name__ == '__main__':
     hourBasePath = conf.SpiderConf.HOUR_DATA_BASEPATH
-    saveBasePath = conf.SpiderConf.BASE_PATH
+    dayBasePath = conf.SpiderConf.ONEDAY_DATA_BASEPATH
 
     encoding = conf.BaseConf.PATH_ENCODING
 
@@ -376,7 +376,7 @@ if __name__ == '__main__':
     province_dict = read_link(filpath)
     while True:
         ###现在时间
-        the_time = '*:00'
+        the_time = '*:21'
         timer(the_time)###定时到整点运行
 
         for link in province_dict:
@@ -385,8 +385,8 @@ if __name__ == '__main__':
             print '*****'*8
         print '#####'*8
         nowtime = datetime.datetime.now()
-        if nowtime.hour == 0: ###如果是0点，则对昨天的新闻进行汇总
+        if nowtime.hour == 9: ###如果是0点，则对昨天的新闻进行汇总
             nowdate = datetime.datetime.now().date()
             yesterday_date = nowdate + datetime .timedelta(days = -1) ###昨天日期
             datetime_string = yesterday_date.strftime('%Y-%m-%d')
-            get_all_province_news_content(datetime_string, hourBasePath = hourBasePath, saveBasePath = saveBasePath, encoding = encoding)
+            get_all_province_news_content(datetime_string, hourBasePath = hourBasePath, saveBasePath = dayBasePath, encoding = encoding)
