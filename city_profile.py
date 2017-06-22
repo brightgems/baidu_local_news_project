@@ -108,7 +108,7 @@ def keywordProfile(news_list, topn=10):
                 else:
                     content = (news_json['title'] + u' ' +  news_json['title'])
 
-                newsList.append([newsID, keyword[1], content, news_json['title'], news_json['news_link'], news_json['source']])
+                newsList.append([newsID, float(keyword[1]), content, news_json['title'], news_json['news_link'], news_json['source']])
 
     ###step3：对关键词词下新闻进行聚类
     keyword_string = ''
@@ -117,7 +117,7 @@ def keywordProfile(news_list, topn=10):
         keyword = key[0]
         keyword_score = key[1]/risk_keyword_count
         keyword_info_dict = dict()
-        keyword_info_dict['socre'] = keyword_score
+        keyword_info_dict['socre'] = float(keyword_score)
 
         keyword_string += keyword + ' '
 
@@ -127,11 +127,12 @@ def keywordProfile(news_list, topn=10):
         if len(news_list) >2:
             clustered_news, score_list = news_clust(news_list)
             sorted_cluster = sorted(clustered_news.items(), key=lambda x:len(x[1]), reverse=True)
+            sorted_cluster = [list(key) for key in sorted_cluster]
         else:
             sorted_cluster = [['0', news_list]]
         keyword_info_dict['cluster'] = sorted_cluster
 
-        keyword_info_list.append((keyword, keyword_info_dict))
+        keyword_info_list.append([keyword, keyword_info_dict])
 
     print 'keywords: %s' %keyword_string
     return keyword_info_list
@@ -220,11 +221,13 @@ def save_city_profile(city_tuple, keyword_profile, topic_profile, date_string, s
     if not os.path.exists(city_path):
         os.makedirs(city_path)
 
-    keyword_profile_path = (u'%s/%s/%s/%s.keywordProfile'%(save_basepath, province, city, date_string)).encode(encoding)
-    open(keyword_profile_path, 'w').write(json.dumps(keyword_profile, indent=4, ensure_ascii=False))
+    keyword_profile_path = (u'%s/%s/%s/%s.keywordProfile.pkl'%(save_basepath, province, city, date_string)).encode(encoding)
+    # open(keyword_profile_path, 'w').write(json.dumps(keyword_profile, indent=4, ensure_ascii=False))
+    pickle.dump(keyword_profile, open(keyword_profile_path, 'wb'))
 
-    topic_profile_path = (u'%s/%s/%s/%s.topicProfile'%(save_basepath, province, city, date_string)).encode(encoding)
-    open(topic_profile_path, 'w').write(json.dumps(topic_profile, indent=4, ensure_ascii=False))
+    topic_profile_path = (u'%s/%s/%s/%s.topicProfile.pkl'%(save_basepath, province, city, date_string)).encode(encoding)
+    # open(topic_profile_path, 'w').write(json.dumps(topic_profile, indent=4, ensure_ascii=False))
+    pickle.dump(topic_profile, open(topic_profile_path, 'wb'))
 
 def daily_city_profile(cityProfile_tuple_list, date_string, news_profile_basepath, city_profile_basepath, path_encoding = 'gbk'):
     print '=============开始城市画像====================='
@@ -267,9 +270,9 @@ if __name__ == '__main__':
 
     ###测试daily_city_profile
     cityProfile_tuple_list = [(u'北京', u'北京')]
-    date_string = '2017-06-16'
-    news_profile_basepath = u'E:/ypj/running_spider/baidu_spider/spider_v3.2/news_day_profile/'
-    city_profile_basepath = u'E:/ypj/running_spider/baidu_spider/spider_v3.2/city_day_profile/'
+    date_string = '2017-06-21'
+    news_profile_basepath = u'D:/baiduCityNews/news_day_profile/'
+    city_profile_basepath = u'D:/baiduCityNews/city_day_profile/'
 
     daily_city_profile(cityProfile_tuple_list, date_string, news_profile_basepath, city_profile_basepath )
 
