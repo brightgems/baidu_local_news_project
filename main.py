@@ -31,8 +31,8 @@ while True:
 
     nowtime = datetime.datetime.now()
     if nowtime.hour == reminde_time: ###如果是7点，则进行邮件推送
-        # yesterday_date_string = utils.get_yesterday_date_string()
-        yesterday_date_string = '2017-06-11'
+        yesterday_date_string = utils.get_yesterday_date_string()
+        # yesterday_date_string = '2017-06-11'
 
         ###step1: 对每日的新闻进行统计，并预测风险类别，计算风险水平
         sorted_city_newscount, sorted_city_risklevel = city_risklevel_profile.daily_risklevel_profile(yesterday_date_string, city_tuple_list, place_news_base_path = news_basepath, risk_level_basepath = risklevel_profile_basepath, path_encoding = encoding)
