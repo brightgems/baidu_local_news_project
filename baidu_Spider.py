@@ -357,6 +357,9 @@ def get_all_province_news_content(datetime_string, hourBasePath = './news_hour_x
             ###获取datetime_string之前五天的所有新闻链接数据，作为今天新闻过滤用
             news_fliter_dict = get_news_fliter_dict(saveBasePath, province, city, datetime_string, day_len = 5)
 
+            if not os.path.exists('%s/%s/%s'%(saveBasePath, province, city)):
+                os.makedirs('%s/%s/%s'%(saveBasePath, province, city))
+
             city_oneday_saveBasePath = '%s/%s/%s/%s.xml'%(saveBasePath, province, city, datetime_string)
             #print city_oneday_basePath.decode('gbk').encode('utf-8')
             print city_oneday_saveBasePath
