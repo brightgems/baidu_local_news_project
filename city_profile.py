@@ -63,7 +63,10 @@ def news_clust(news_list):
         km.fit(feature_vector)
         # print metrics.calinski_harabaz_score(feature_vector.toarray(), km.labels_)
         print km.labels_
-        score = metrics.silhouette_score(feature_vector.toarray(), km.labels_, metric='euclidean')
+        try:
+            score = metrics.silhouette_score(feature_vector.toarray(), km.labels_, metric='euclidean')
+        except:
+            score = 0
         score_list.append((i, score))
 
     sorted_score = sorted(score_list, key=lambda x:x[1], reverse=True)
